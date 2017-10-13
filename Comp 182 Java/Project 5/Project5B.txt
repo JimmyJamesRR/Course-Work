@@ -1,0 +1,239 @@
+/*Authoer:  James Renger
+Course:     Comp 182(16203-SP17)
+Project:    Project 5
+Program function:  The Purpose of this project is to impliment a queue for 
+simulating a banks wait time, service time, and customer flow.
+External source code used/augmented for this project:  Parsing Intputs.txt 
+(Course materials), and guidance from CSUN computer science tutors.
+Files in project:  Project 5B, Event.java, eventList.csv, TransactionData.CSV
+*/
+
+
+package project5b;
+//Libraries
+import project5b.Event;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
+
+
+public class Project5B {
+
+        
+        
+    public static void main(String[] args) {
+        //Declare Variables
+        int time;
+        int waitTime = 0;
+        int totalCustomers = 0;
+        Event passEvent;
+        String customerInfoCSV = "eventList.csv";
+        String transactionInfoCSV = "Transaction Data.csv";
+        LinkedList<Event> bankQueue = new LinkedList<>();
+        
+
+
+        //Scan the transaction value times into variables, and populate event Queue
+        //from CSV files with a buffered reader
+        LinkedList<Event> ADQueue = eventQueueMethod(customerInfoCSV,transactionInfoCSV);
+        
+
+                
+        System.out.println("Customer ID  Arrived   Waited     At Teller      Transaction Time     Departed");
+        
+        //While events remain in the Queue process the events based on if the next
+        //Event is an arrival, or a departure.
+        
+        while(ADQueue.isEmpty() != true || bankQueue.isEmpty() != true){
+            //If it's an arrival, note the time, remove it from Queue, and add 
+            //it to the bank Q.  If bank Q empty, serve it instantly, adding departure
+            //to event Q via insert static method.  Otherwise, just add to Q.
+            if(ADQueue.peek().getEventType() == 'A'){
+                passEvent = new Event(ADQueue.peek());
+                ADQueue.removeFirst();
+                time = passEvent.getEventTime();
+                if(bankQueue.isEmpty() == true){                    
+                    passEvent.serve(time);
+                    ADQueue = insert(passEvent, ADQueue);                   
+                }
+                bankQueue.addLast(passEvent);                  
+            }
+            //If the event was a departure.  Print the served customers data, update totals,
+            //Use the served method to generate the next customers data, add the event as
+            //a departure event via insert, and continue.
+            else if(ADQueue.peek().getEventType() == 'D'){
+                time = ADQueue.peek().getEventTime();
+                System.out.println(ADQueue.peek().getCustomerID() + "            " +
+                        ADQueue.peek().getArrival() + "          " 
+                        + ADQueue.peek().getWait() +"             " + 
+                        (ADQueue.peek().getArrival() + ADQueue.peek().getWait())
+                        + "             " 
+                            + ADQueue.peek().getTransactionTime() + "                      "
+                                + ADQueue.peek().getDepartureTime());
+                waitTime = waitTime + ADQueue.peek().getWait();
+                totalCustomers++;
+                ADQueue.removeFirst();
+                bankQueue.removeFirst();
+                if(bankQueue.isEmpty() != true){
+                    passEvent = bankQueue.peek();
+                    passEvent.serve(time);
+                    ADQueue = insert(passEvent, ADQueue);                                 
+                }
+            }
+        } 
+        //Print the final simulation data
+        System.out.println("Of " + totalCustomers + " customers, the average "
+                + "wait time was " + (waitTime/totalCustomers) + ".");
+    }
+                       
+    
+//Uses a buffered reader to input the CSV data
+    public static LinkedList<Event> eventQueueMethod(String customerInfo, String transactionInfo){
+        //Set return variables, counters, and break controls
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+        String transactionData[][] = new String [4][3];
+        LinkedList<Event> returnList = new LinkedList<Event>();
+        Event tempEvent = null;
+        int rowcount = 0;
+        //input the transaction types.
+        try {
+            br = new BufferedReader(new FileReader(transactionInfo));         
+
+                //Clear out the label string
+                br.readLine();
+            
+                
+            
+            //while loop that will read and store the data
+            while ((line = br.readLine()) != null) {
+                String[] inputString = line.split(cvsSplitBy);
+                transactionData[rowcount][0] = inputString[0];
+                transactionData[rowcount][1] = inputString[1];
+                transactionData[rowcount][2] = inputString[2];
+                rowcount++;
+            }
+                
+             
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }      
+        // End of the conversion of file to array for transaction types
+        
+        
+        //Start inputing the customer arrival events, and transaction types
+        try {
+            br = new BufferedReader(new FileReader(customerInfo));         
+
+                //Clear out the label string
+                br.readLine();
+                //Prime the loop with first transaction, use a for loop to 
+                //find the matching transaction type
+                String[] inputString = br.readLine().split(cvsSplitBy);
+                for(rowcount = 0; rowcount < 4; rowcount++){                    
+                        if(inputString[3].equals(transactionData[rowcount][1])){
+                            tempEvent = new Event(Integer.parseInt(inputString[1]),
+                                Integer.parseInt(inputString[2]),
+                                    Integer.parseInt(transactionData[rowcount][2]));
+                            break;
+                        }
+                }
+                                         
+            //while loop that will read the data, until nothing more is found
+            while ((line = br.readLine()) != null) {
+                inputString = line.split(cvsSplitBy);          
+                //If the transaction is not a new customer, noted by no new arrival time,
+                //Add the transaction time to the existing temp event.
+                if (inputString[2].equals("")){
+                    for(rowcount = 0; rowcount < 4; rowcount++){                    
+                        if(inputString[3].equals(transactionData[rowcount][1]))                   
+                        tempEvent.addTransactionTime(Integer.parseInt(transactionData[rowcount][2]));                        
+                    }
+                }
+                //If not an existing arrival event, store the temp event at the end
+                //of the return Q, and create a new event.
+                else{
+                    returnList.addLast(tempEvent);
+                    for(rowcount = 0; rowcount < 4; rowcount++){                    
+                        if(inputString[3].equals(transactionData[rowcount][1])){
+                            tempEvent = new Event(Integer.parseInt(inputString[1]),
+                                Integer.parseInt(inputString[2]),
+                                    Integer.parseInt(transactionData[rowcount][2]));
+                            break;                   
+                        }
+                    }
+                }
+            
+            }
+        //enqueue the last event that wasn't added after buffer returned Null
+        returnList.addLast(tempEvent);
+            
+           
+                
+             
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }      
+        // End of the conversion of file to array 2
+        
+        
+        return returnList;
+    }    
+    //Static method to insert an event into the appropriate position of a linked list.
+    public static LinkedList<Event> insert(Event inEvent, LinkedList<Event> eventList){
+    
+        int test = 0;
+        //if the list is empty, just add it to the list, game over.
+        if(eventList.isEmpty()){
+            eventList.add(inEvent);
+            return eventList;
+        }
+        //Otherwise, search through the list until it's found a value that is 
+        //larger than the input event.  Continue search until placed input
+        else{
+            while(true){
+                //If the event time is less than the test event, insert in front
+                //of event, and return the list.
+                if(eventList.get(test).getEventTime() >= inEvent.getEventTime()){
+                                    
+                    eventList.add(test, inEvent);
+                    return eventList;
+                }
+                //If at the end of the list, add the event at the end, and return the queue.
+                else if((eventList.size() - 1) <= test){
+                   eventList.addLast(inEvent);
+                   return eventList;
+                }
+                //Otherwise, check the next address
+                else
+                test++;                    
+                }
+        }
+    }
+}

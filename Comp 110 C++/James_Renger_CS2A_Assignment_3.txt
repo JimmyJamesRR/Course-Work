@@ -1,0 +1,225 @@
+// CS 1A Lab 3 Framework Updated to Cover Option A
+// James Renger's Solution:
+// Original - Lab 3 Framework CS 2A Fall 2016
+
+// Notes:
+// -Changed Ingrediant Constants
+// -Added Serving information calculation
+// -Added Error Checking
+
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+// main client --------------------------------------------------------
+int main()
+{
+   // food #1 constants
+   const string FOOD_1_NAME = "Pasta, corn, cooked";
+   const  int FOOD_1_CALORIES_P140G = 176;        // in calories
+   const  double FOOD_1_CARBS_P140G = 39.1;   // in grams
+   // food #2 constants
+   const  string FOOD_2_NAME = "Tomato products, canned, sauce, with onions";
+   const  int FOOD_2_CALORIES_P245 = 103;        // in calories
+   const  double FOOD_2_CARBS_P245G = 24.4;   // in grams
+   // food #3 constants
+   const  string FOOD_3_NAME = "Sausage, Italian, pork, cooked";
+   const  int FOOD_3_CALORIES_P083G = 83;       // in calories
+   const  double FOOD_3_CARBS_P083G = 3.5;    // in grams
+   // food #4 constants
+   const  string FOOD_4_NAME = "PEPPERIDGE FARM Crusty Italian Bread, Garlic";  //Pepperidge Farms remembers.
+   const  int FOOD_4_CALORIES_P050G = 50;       // in calories
+   const  double FOOD_4_CARBS_P050G = 50;    // in grams
+   string recipeName, userInputStr;
+   int userInputInt;
+   double totalCarbs, totalCals;
+   // initialize accumulator variables
+   totalCarbs  = 0.;
+   totalCals =  0;
+   // print menu
+   cout << "---------- List of Possible Ingredients ---------" << endl;
+   cout << "  Food #1: " << FOOD_1_NAME << endl;
+   cout << "  Food #2: " << FOOD_2_NAME << endl;
+   cout << "  Food #3: " << FOOD_3_NAME << endl;
+   cout << "  Food #4: " << FOOD_4_NAME << endl << endl;
+   // name of recipe
+   cout << "What are you calling this recipe? ";
+   getline(cin, recipeName);
+   // food #1 ---------------------------------------------------------
+   cout << "How many grams of " << FOOD_1_NAME << "? ";
+   getline(cin, userInputStr);
+   istringstream(userInputStr) >> userInputInt;
+   //Error Checking
+   if (userInputInt < 0 || userInputInt > 1000) {
+       cout << "Your input variable exceeds this programs limits(1-1000)."  << endl;
+       return 0;
+   }
+   // update accumulators
+   totalCals += userInputInt * (FOOD_1_CALORIES_P140G/140.);
+   totalCarbs  += userInputInt * (FOOD_1_CARBS_P140G/140.);
+   // food #2 ---------------------------------------------------------
+   cout << "How many grams of " << FOOD_2_NAME << "? ";
+   getline(cin, userInputStr);
+   istringstream(userInputStr) >> userInputInt;
+   //Error Checking
+   if (userInputInt < 0 || userInputInt > 1000) {
+       cout << "Your input variable exceeds this programs limits(1-1000)."  << endl;
+       return 0;
+   }
+   // update accumulators
+   totalCals += userInputInt * (FOOD_2_CALORIES_P245/245.);
+   totalCarbs  += userInputInt * (FOOD_2_CARBS_P245G/245.);
+   // food #3 ---------------------------------------------------------
+   cout << "How many grams of " << FOOD_3_NAME << "? ";
+   getline(cin, userInputStr);
+   istringstream(userInputStr) >> userInputInt;
+   //Error Checking
+   if (userInputInt < 0 || userInputInt > 1000) {
+       cout << "Your input variable exceeds this programs limits(1-1000)."  << endl;
+       return 0;
+   }
+   // update accumulators
+   totalCals += userInputInt * (FOOD_3_CALORIES_P083G/83.);
+   totalCarbs  += userInputInt * (FOOD_3_CARBS_P083G/83.);
+   // food #4 ---------------------------------------------------------
+   cout << "How many grams of " << FOOD_4_NAME << "? ";
+   getline(cin, userInputStr);
+   istringstream(userInputStr) >> userInputInt;
+   //Error Checking
+   if (userInputInt < 0 || userInputInt > 1000) {
+       cout << "Your input variable exceeds this programs limits (1-1000)."  << endl;
+       return 0;
+   }
+   // update accumulators
+   totalCals += userInputInt * (FOOD_4_CALORIES_P050G/50.);
+   totalCarbs  += userInputInt * (FOOD_4_CARBS_P050G/50.);
+   // Number of Servings
+   cout << "How many servings does this make? ";
+   getline(cin, userInputStr);
+   istringstream(userInputStr) >> userInputInt;
+   //Error Checking
+   if (userInputInt < 1 || userInputInt > 10) {
+       cout << "Your input variable exceeds this programs limits(1-10)."  << endl;
+       return 0;
+   }
+   // report results --------------------------------------------------
+   cout << "\nNutrition for " << recipeName << "------------" << endl;
+   cout << "  Calories: " << totalCals << endl;
+   cout << "  Total Carbohydrates: " << totalCarbs << endl;
+   cout << "Recipes serves: " << userInputInt<< endl;
+   //Convert totals to serving sizes
+   totalCals = totalCals / userInputInt;
+   totalCarbs = totalCarbs / userInputInt;
+   cout << "  " << totalCals << " Calories per serving. " << endl;
+   cout << "  " << totalCarbs << "  Carbohydrates(in grams) per serving: " << totalCarbs << endl;
+   return 0;
+}
+
+/*  Run 1 (Output)
+---------- List of Possible Ingredients ---------
+  Food #1: Pasta, corn, cooked
+  Food #2: Tomato products, canned, sauce, with onions
+  Food #3: Sausage, Italian, pork, cooked
+  Food #4: PEPPERIDGE FARM Crusty Italian Bread, Garlic
+
+What are you calling this recipe? Pasta, with Sauce, and Garlic Bread
+How many grams of Pasta, corn, cooked? 120
+How many grams of Tomato products, canned, sauce, with onions? 40
+How many grams of Sausage, Italian, pork, cooked? 0
+How many grams of PEPPERIDGE FARM Crusty Italian Bread, Garlic? 50
+How many servings does this make? 1
+
+Nutrition for Pasta, with Sauce, and Garlic Bread------------
+  Calories: 217.673
+  Total Carbohydrates: 87.498
+Recipes serves: 1
+  217.673 Calories per serving.
+  87.498  Carbohydrates(in grams) per serving: 87.498
+Press any key to continue . . .
+*/
+
+/* Run 2 (Output)
+---------- List of Possible Ingredients ---------
+  Food #1: Pasta, corn, cooked
+  Food #2: Tomato products, canned, sauce, with onions
+  Food #3: Sausage, Italian, pork, cooked
+  Food #4: PEPPERIDGE FARM Crusty Italian Bread, Garlic
+
+What are you calling this recipe? Pasta, with Sauce, and Sausage
+How many grams of Pasta, corn, cooked? 240
+How many grams of Tomato products, canned, sauce, with onions? 80
+How many grams of Sausage, Italian, pork, cooked? 160
+How many grams of PEPPERIDGE FARM Crusty Italian Bread, Garlic? 0
+How many servings does this make? 2
+
+Nutrition for Pasta, with Sauce, and Sausage------------
+  Calories: 495.347
+  Total Carbohydrates: 81.7429
+Recipes serves: 2
+  247.673 Calories per serving.
+  40.8715  Carbohydrates(in grams) per serving: 40.8715
+Press any key to continue . . .
+*/
+
+/* Run 3 (Output)
+---------- List of Possible Ingredients ---------
+  Food #1: Pasta, corn, cooked
+  Food #2: Tomato products, canned, sauce, with onions
+  Food #3: Sausage, Italian, pork, cooked
+  Food #4: PEPPERIDGE FARM Crusty Italian Bread, Garlic
+
+What are you calling this recipe? Order of Garlic Bread
+How many grams of Pasta, corn, cooked? 0
+How many grams of Tomato products, canned, sauce, with onions? 0
+How many grams of Sausage, Italian, pork, cooked? 0
+How many grams of PEPPERIDGE FARM Crusty Italian Bread, Garlic? 500
+How many servings does this make? 10
+
+Nutrition for Order of Garlic Bread------------
+  Calories: 500
+  Total Carbohydrates: 500
+Recipes serves: 10
+  50 Calories per serving.
+  50  Carbohydrates(in grams) per serving: 50
+Press any key to continue . . .
+*/
+
+/* Run 4 (Output)
+---------- List of Possible Ingredients ---------
+  Food #1: Pasta, corn, cooked
+  Food #2: Tomato products, canned, sauce, with onions
+  Food #3: Sausage, Italian, pork, cooked
+  Food #4: PEPPERIDGE FARM Crusty Italian Bread, Garlic
+
+What are you calling this recipe? Pasta, Sauce, Sausage, and Garlic Bread
+How many grams of Pasta, corn, cooked? 420
+How many grams of Tomato products, canned, sauce, with onions? 120
+How many grams of Sausage, Italian, pork, cooked? 240
+How many grams of PEPPERIDGE FARM Crusty Italian Bread, Garlic? 150
+How many servings does this make? 3
+
+Nutrition for Pasta, Sauce, Sausage, and Garlic Bread------------
+  Calories: 968.449
+  Total Carbohydrates: 289.372
+Recipes serves: 3
+  322.816 Calories per serving.
+  96.4572  Carbohydrates(in grams) per serving: 96.4572
+Press any key to continue . . .
+*/
+
+/* Run 5 (Output)(With Error)
+---------- List of Possible Ingredients ---------
+  Food #1: Pasta, corn, cooked
+  Food #2: Tomato products, canned, sauce, with onions
+  Food #3: Sausage, Italian, pork, cooked
+  Food #4: PEPPERIDGE FARM Crusty Italian Bread, Garlic
+
+What are you calling this recipe? Creepy Pasta
+How many grams of Pasta, corn, cooked? 0
+How many grams of Tomato products, canned, sauce, with onions? 0
+How many grams of Sausage, Italian, pork, cooked? 0
+How many grams of PEPPERIDGE FARM Crusty Italian Bread, Garlic? 0
+How many servings does this make? -1
+Your input variable exceeds this programs limits(1-10).
+Press any key to continue . . .
+*/

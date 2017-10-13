@@ -1,0 +1,64 @@
+
+/*Authoer:  James Renger
+Course:     Comp 182(16203-SP17)
+Project:    Project 6
+Program function:   The function of this program is to allow the program to continue
+to ask questions, and to fill out a tree, so that it can accurately catagorize
+the users input.
+Files in project:   Project6.java, Tree.java,Node.java
+Code Referenced:    No external code was used.
+*/
+
+package project6;
+
+public class Node {
+    Node parent;
+    String question;
+    String answer;
+    Node yes;
+    Node no;
+//Constructors    
+public Node(String q){    
+    question = q;
+    }        
+public Node(String q, String a){    
+    question = q;
+    answer = a;
+}    
+public Node(String q, String a, Node R){
+    parent = R;
+    question = q;
+    answer = a;
+    yes = null;
+    no = null;
+}    
+
+//Get/Sets
+public String getAnswer(){        
+    return answer;
+}
+public void setAnswer(String a){
+    answer = a;
+}
+        
+public void setQuestion(String q){
+    question = q;
+}
+public String getQuestion(){
+    return question;
+}
+public void setNo(Node n){
+    no = n;
+}
+public void setYes(Node y){
+    yes = y;
+}
+public Node getYes(){
+        return yes;
+}
+public Node getNo(){
+        return no;
+}
+public Node getParent(){
+        return parent;
+}

@@ -1,0 +1,173 @@
+// CS 1A Lab 5 Option A
+// James Renger's Solution:
+// Original - Lab 3 Framework CS 2A Fall 2016
+
+/* Notes: 
+Ask the user to enter both a key character, and also a target string
+?(phrase,sentence, etc.).  Then, show the user three things:
+1.The target string with the key character replaced by dashes.
+2.The target string with the key character removed.
+3.The number of occurrences of the key character (case sensitive) in the
+target string.
+This program does not loop for different strings.  Once it processes a string, it
+ends.
+
+Whenever the user makes an input error, keep at them until they get it right. Do
+not return from an input method until you have acquired a legal value, even if it
+takes years ... */
+
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+
+//Method Prototypes -------------------------------------------------
+char getKeyLetter();  
+string getString();
+string maskLetter(string theString, char keyLetter);
+string removeLetter(string theString, char keyLetter);
+int countKey(string theString, char keyLetter);
+
+int main()
+{
+    //Declaring Variables
+    char keyLetter;
+    string theString, maskString, removeString;
+    int keyCount;
+    //Computations
+    keyLetter = getKeyLetter();
+    theString = getString();
+    maskString = maskLetter(theString, keyLetter);
+    removeString = removeLetter(theString, keyLetter);
+    keyCount = countKey(theString, keyLetter);
+    //Output
+    cout << keyLetter << " appears " << keyCount << " times.\n";
+    cout << maskString << "\n";
+    cout << removeString << "\n";
+    return 0;
+}
+
+char getKeyLetter()
+{
+    //While Loop Continues Requesting Input Until Valid Data Entered
+    while(true) 
+    {
+        string keyLetterString;
+        cout << "Please enter a single character for search for: ";    
+        getline(cin, keyLetterString);
+        //If is used to provide return/break when input is valid
+        if (keyLetterString.length() == 1) {
+            char inputLetter = keyLetterString[0];
+            return inputLetter;
+        }
+        else
+            cout << "There appears to be an error in the input. \n";
+    }
+}
+
+string getString()
+{
+    //While Loop Continues Requesting Input Until Valid Data Entered
+    while(true) 
+    {
+        string getString;
+        cout << "Please enter a string to be for searched(4+ characters): ";    
+        getline(cin, getString);
+        //If is used to provide return/break when input is valid
+        if (getString.length() >= 4) 
+            return getString;
+        else
+            cout << "There appears to be an error in the input. \n";        
+    }
+}
+
+string maskLetter(string theString, char keyLetter)
+{
+    string maskingString = theString;
+    int searchCount = 0;
+    //While loop controls the length of searching
+    while (searchCount <= theString.length())
+    {
+        //if checks current place for keyletter, if found replaces
+        if (maskingString[searchCount] == keyLetter)
+            maskingString[searchCount] = '-';
+        //Counter pushing the loop forward
+        searchCount++;    
+    }
+    return maskingString;
+}
+
+string removeLetter(string theString, char keyLetter)
+{
+    string removeString;
+    int searchCount = 0;
+    //While loop controls the length of searching
+    while (searchCount <= theString.length())
+    {
+        //using while keeps the program checking for keyletters
+        while (theString[searchCount] == keyLetter)
+        {
+            searchCount++; 
+            //Counter pushing the loop forward, without recording
+        }
+        //By using string concatenation, only store the data needed
+        removeString = removeString + theString[searchCount];
+        //Counter pushing the loop forward
+        searchCount++;    
+    }
+    return removeString;
+}
+
+int countKey(string theString, char keyLetter)
+{
+    int keyCounting = 0;
+    int searchCount = 0;
+    //While loop controls the length of searching
+    while (searchCount <= theString.length())
+    {
+        //If increases the count if character searched is keyletter
+        if (theString[searchCount] == keyLetter)
+            keyCounting++;
+        //Counter pushing the loop forward
+        searchCount++;    
+    }
+    return keyCounting;
+}
+
+/*  Run 1
+Please enter a single character for search for: H
+Please enter a string to be for searched(4+ characters): Hello
+H appears 1 times.
+-ello
+ello
+Press any key to continue . . .
+
+Run 2
+Please enter a single character for search for: At
+There appears to be an error in the input.
+Please enter a single character for search for: What?
+There appears to be an error in the input.
+Please enter a single character for search for: b
+Please enter a string to be for searched(4+ characters): bababooey
+b appears 3 times.
+-a-a-ooey
+aaooey
+Press any key to continue . . .
+
+Run 3
+Please enter a single character for search for: I
+Please enter a string to be for searched(4+ characters): Programming is fun
+I appears 0 times.
+Programming is fun
+Programming is fun
+Press any key to continue . . .
+
+Run 4
+Please enter a single character for search for: 8
+Please enter a string to be for searched(4+ characters): 1886
+8 appears 2 times.
+1--6
+16
+Press any key to continue . . .
+
+*/

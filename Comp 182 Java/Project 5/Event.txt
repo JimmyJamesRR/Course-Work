@@ -1,0 +1,100 @@
+/*Authoer:  James Renger
+Course:     Comp 182(16203-SP17)
+Project:    Project 5
+Program function:  The Purpose of this project is to impliment a queue for 
+simulating a banks wait time, service time, and customer flow.
+External source code used/augmented for this project:  Parsing Intputs.txt 
+(Course materials), and guidance from CSUN computer science tutors.
+Files in project:  Project 5B, Event.java, eventList.csv, TransactionData.CSV
+*/
+
+package project5b;
+
+public class Event {
+    char eventType;
+    int customerID;
+    int eventTime;
+    int arrival;
+    int wait;
+    int transactionTime;
+    int departureTime;
+    boolean served;
+
+public Event(int ID, int a, int tt){
+    eventType = 'A';
+    customerID = ID;
+    arrival = a;
+    eventTime = a;
+    transactionTime = tt;
+    served = false;
+}    
+
+public Event(Event passEvent){
+    eventType = passEvent.eventType;
+    customerID = passEvent.customerID;
+    arrival = passEvent.arrival;
+    eventTime = passEvent.eventTime;
+    transactionTime = passEvent.transactionTime;
+    served = passEvent.served;
+}    
+
+    public void serve(int currentTime){
+        eventType = 'D';
+        wait = currentTime - arrival;
+        departureTime = currentTime + transactionTime;
+        eventTime = departureTime;
+        served = true;
+}
+    public char getEventType(){
+        return eventType;
+    }
+    public void setEventType(char type){
+        eventType = type;
+    }
+    public void setCustomerID(int cID){
+        customerID = cID;
+    }
+    public int getCustomerID(){
+        return customerID;
+    }            
+    public void setArrival(int a){
+        arrival = a;
+    }
+    public int getArrival(){
+        return arrival;
+    }
+    public void setWait(int w){
+        wait = w - arrival;   
+    }
+    public int getWait(){
+        return wait;        
+    }
+    public void setTransactionTime(int tt){
+        transactionTime = tt;
+    }
+    public int getTransactionTime(){
+        return transactionTime;
+    }
+    public void addTransactionTime(int tt){
+        transactionTime = transactionTime + tt;
+    }
+    public void setEventTime(int time){
+        eventTime = time;
+    }
+    public int getEventTime(){
+        return eventTime;
+    }
+    public void setDepartureTime(int time){
+        departureTime = time;
+    }
+    public int getDepartureTime(){
+        return departureTime;
+    }
+    public void setServed(boolean s){
+        served = s;
+    }
+    public boolean getServed(){
+        return served;
+    }
+  
+}

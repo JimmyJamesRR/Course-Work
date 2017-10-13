@@ -1,0 +1,264 @@
+// CS2A Lab 6 Option A
+// James Renger's Solution:
+// Original - Lab 3 Framework CS 2A Fall 2016
+
+/* Notes: 
+A Slot Machine, but throwing errors after multiple runs.  Still aiming to improve the code.
+*/
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Employee class prototype ---------------------
+class TripleString
+{
+private:
+  string string1;
+  string string2;
+  string string3;
+  bool validString(string str);
+
+public:
+   //static constants
+   static const int MAX_LEN = 20;
+ 
+   // default constructor
+   TripleString::TripleString()
+   {
+       string1 = "";
+       string2 = "";
+       string3 = "";
+   }
+
+   // mutators and accessors
+   void setString1();
+   void setString2();
+   void setString3();   
+   string getString1();
+   string getString2();
+   string getString3();
+};
+// Global Method Prototypes -------------------------------------------------
+int getBet();
+TripleString pull();
+void display(TripleString thePull, int winnings);
+
+// main method ---------------------------------
+int  main()
+{
+    while(true) 
+    {
+        int bet;
+        bet = getBet();
+        if (bet == 0)
+            break;
+        TripleString thePull = pull();
+        display(thePull, bet);
+    }   
+}
+//-------- Method Definitions
+int getBet()
+{
+    int input = -1;
+    while(input < 0 || input > 50)
+    {
+        cout << "Please enter your bet: ";
+        cin >> input;
+        if (input >= 0 && input <= 50)
+           return input;
+    }
+}
+TripleString pull()
+{
+    TripleString thePull;
+    thePull.setString1();
+    thePull.setString2();
+    thePull.setString3();
+    return thePull;
+}
+
+void display(TripleString thePull, int bet)
+{
+    int winnings = 0;
+    string string1 = thePull.getString1();
+    string string2 = thePull.getString2();
+    string string3 = thePull.getString3();
+    if (string1 == "cherries")
+    {
+        if (string2 == "cherries")
+        {
+            if (string3 == "cherries")
+                winnings = bet * 30;
+            else            
+                winnings = bet * 15;
+        }
+        else
+            winnings = bet * 5;
+    }
+    else if (string1 == "BAR" && string2 == "BAR" && string3 == "BAR")
+        winnings = bet * 50;
+    else if (string1 == "7" && string2 == "7" && string3 == "7")
+        winnings = bet * 100;
+    cout << string1 << " " << string2 << " " << string3 << "\n";
+    if (winnings > 0)
+        cout << "You won " << winnings << " from a bet of " << bet << "!\n \n";
+    else
+        cout << "Sorry, you lost the bet of " << bet << ".\n \n";
+}
+
+// -------- TripleString Member Functions ------------
+bool TripleString::validString(string str)
+{
+    if(str.length() <= MAX_LEN && str != "")
+        return true;
+    //else
+    return false;
+}
+void TripleString::setString1()
+{
+    int randomNum = rand() % 20;
+    string1 = "";
+    string current;
+    while (string1 == "")
+    {
+        if (randomNum == 0)
+        {
+            current = "space";
+        }
+        else if (randomNum > 0 && randomNum <= 5)
+        {
+            current = "7";
+        }
+        else if (randomNum >= 6 && randomNum <= 11)
+        {
+            current = "cherries";
+        }
+        else if (randomNum > 11 && randomNum < 19)
+        {
+            current = "BAR";
+        } 
+        if (validString(current) == true)
+            string1 = current;
+    }
+}
+void TripleString::setString2()
+{
+    int randomNum = rand() % 20;
+    string current;
+    string2 = "";
+    while (string2 == "")
+    {
+        if (randomNum == 0)
+        {
+            current = "space";
+        }
+        else if (randomNum > 0 && randomNum <= 5)
+        {
+            current = "7";
+        }
+        else if (randomNum >= 6 && randomNum <= 11)
+        {
+            current = "cherries";
+        }
+        else if (randomNum > 11 && randomNum < 19)
+        {
+            current = "BAR";
+        } 
+        if (validString(current) == true)
+            string2 = current;
+    }
+}
+void TripleString::setString3()
+{
+    int randomNum = rand() % 20;
+    string current;
+    string3 = "";
+    while (string3 == "")
+    {
+        if (randomNum == 0)
+        {
+            current = "space";
+        }
+        else if (randomNum > 0 && randomNum <= 5)
+        {
+            current = "7";
+        }
+        else if (randomNum >= 6 && randomNum <= 11)
+        {
+            current = "cherries";
+        }
+        else if (randomNum > 11 && randomNum < 19)
+        {
+            current = "BAR";
+        } 
+        if (validString(current) == true)
+            string3 = current;
+    }
+}
+// accessor "get" methods 
+string TripleString::getString1()
+{
+   return string1;
+}
+string TripleString::getString2()
+{
+   return string2;
+}
+string TripleString::getString3()
+{
+   return string3;
+}
+
+/*  Example Run:
+Please enter your bet: 2
+7 cherries BAR
+Sorry, you lost the bet of 2.
+
+Please enter your bet: 3
+space cherries 7
+Sorry, you lost the bet of 3.
+
+Please enter your bet: 4
+BAR BAR 7
+Sorry, you lost the bet of 4.
+
+Please enter your bet: 5
+7 7 7
+You won 500 from a bet of 5!
+
+Please enter your bet: 6
+7 cherries 7
+Sorry, you lost the bet of 6.
+
+Please enter your bet: 7
+cherries BAR 7
+You won 35 from a bet of 7!
+
+Please enter your bet: 4
+cherries BAR cherries
+You won 20 from a bet of 4!
+
+Please enter your bet: 3
+7 7 BAR
+Sorry, you lost the bet of 3.
+
+Please enter your bet: 2
+BAR 7 7
+Sorry, you lost the bet of 2.
+
+Please enter your bet: 1
+BAR BAR BAR
+You won 50 from a bet of 1!
+
+Please enter your bet: 2
+cherries cherries cherries
+You won 60 from a bet of 2!
+
+Please enter your bet: 3
+BAR cherries BAR
+Sorry, you lost the bet of 3.
+
+Please enter your bet: 4
+*/

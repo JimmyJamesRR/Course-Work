@@ -1,0 +1,34 @@
+/*Authoer:  James Renger
+Course:     Comp 182(16203-SP17)
+Project:    Project 5
+Program function:  The Purpose of this project is to impliment a queue for 
+simulating a banks wait time, service time, and customer flow.
+External source code used/augmented for this project:  Parsing Intputs.txt 
+(Course materials), and guidance from CSUN computer science tutors.
+Files in project:  Project 5B, Event.java, eventList.csv, TransactionData.CSV
+*/
+
+
+package project6;
+//Libraries
+
+import java.util.LinkedList;
+import java.util.Scanner; 
+
+
+public class Project6 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        boolean run = true;
+        Tree Universe = new Tree("Does it demonstrate self awareness?");
+        while(run){
+            System.out.println("Think of an animal.\n  I'm going to try to ask questions, until I can guess it.");
+            run = Universe.ask(Universe.getRoot());
+        }
+        System.out.println("Good Bye.");
+    }           
+}

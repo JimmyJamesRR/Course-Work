@@ -1,0 +1,121 @@
+// CS 2A Lab 4 Froyo
+// James Renger's Solution:
+// Original - Lab 3 Framework CS 2A Fall 2016
+
+// Notes:
+// -Changed Ingrediant Constants
+// -Added Serving information calculation
+// -Added Error Checking
+
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+// main client --------------------------------------------------------
+int main()
+{
+   // Declaring variables
+   int userPurchase;
+   int stamps = 0;
+   int stampsRequired = 10;
+   bool loopControl = true;   
+   string userControl;
+   // Create Main loop - Purchase Option
+   while (loopControl){
+       // Prompt input 
+       cout << "Menu:\n  (P)urchase\n  (S)hut Down \n";
+       getline(cin, userControl);
+       if ( userControl[0] == 'p' || userControl[0] == 'P'){ //Purchase loop orgin
+           //Check for stamps
+           if (stamps >= stampsRequired){
+               cout << "You qualify for a free yogurt, with " 
+                << stamps << " stamps.  Would you like your reward now? ";
+                // Get input if they want free yogurt
+                getline(cin, userControl);
+                //Check User Input, if yes reduce and restart main loop
+                if (userControl[0] == 'y' || userControl[0] == 'Y'){
+                    stamps = stamps - stampsRequired;
+                    cout << "You have " << stamps << " stamps remaining. \n";
+                    continue;
+                }
+                //Reward loop decline option
+                else if (userControl[0] == 'n' || userControl[0] == 'N')
+                    cout << "Continuing to new purchase... \n";
+                //Error checking rewards loop
+                else {
+                     cout << "That doesn't appear to be a valid input. \n ";
+                     continue;
+                }
+           }
+           //Prompt for User input for number of yogurts to purchase
+           cout << "How many yogurts would you like to purchase? ";
+           getline(cin, userControl);
+           istringstream(userControl) >> userPurchase;
+           //Error checking User Input
+           if (userPurchase < 0 || userPurchase > 1000){
+              cout << "That doesn't appear to be a valid input. \n";
+              continue;
+           }
+           //Update stamps
+           stamps = stamps + userPurchase;  
+           cout << "Enjoy your yogurt!  You have " << stamps << " stamps remaining. \n";
+           userPurchase = 0;
+       } //purchase loop termination
+       else if ( userControl[0] == 's' || userControl[0] == 'S')
+           loopControl = false;       
+       else  //Main Loop Error Checking
+           cout << "Please enter a valid selection \n";
+   }  // Ends main loop
+   return 0;
+}  
+/* Example of Run
+Menu:
+  (P)urchase
+  (S)hut Down
+p
+How many yogurts would you like to purchase? 12
+Enjoy your yogurt!  You have 12 stamps remaining.
+Menu:
+  (P)urchase
+  (S)hut Down
+p
+You qualify for a free yogurt, with 12 stamps.  Would you like your reward now? 12
+That doesn't appear to be a valid input.
+ Menu:
+  (P)urchase
+  (S)hut Down
+p
+You qualify for a free yogurt, with 12 stamps.  Would you like your reward now? n
+Continuing to new purchase...
+How many yogurts would you like to purchase? 12
+Enjoy your yogurt!  You have 24 stamps remaining.
+Menu:
+  (P)urchase
+  (S)hut Down
+p
+You qualify for a free yogurt, with 24 stamps.  Would you like your reward now? y
+You have 14 stamps remaining.
+Menu:
+  (P)urchase
+  (S)hut Down
+p
+You qualify for a free yogurt, with 14 stamps.  Would you like your reward now? y
+You have 4 stamps remaining.
+Menu:
+  (P)urchase
+  (S)hut Down
+p
+How many yogurts would you like to purchase? -1
+That doesn't appear to be a valid input.
+Menu:
+  (P)urchase
+  (S)hut Down
+p
+How many yogurts would you like to purchase? s
+That doesn't appear to be a valid input.
+Menu:
+  (P)urchase
+  (S)hut Down
+s
+Press any key to continue . . .
+*/

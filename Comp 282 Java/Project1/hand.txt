@@ -1,0 +1,119 @@
+// Team Member Spock: Alkheraigi, Meshari 
+// Team Member Bones: Renger, James 
+// Class: COMP282 
+// Assignment: Project 1
+// Filelist: Main.java, card.java, hand.java, handScoreComparator.java
+
+package pkg282project1;
+
+public class hand {
+    card[] playerCards = new card[3];
+    card[] communityCards = new card[5];
+    card[] bestHand = new card[6];
+    int playerNum;
+    int score;
+
+    public hand(String input, int playNumb){
+        playerNum = playNumb;
+        
+        String[] split = input.split("\\s+");
+        card[] totalCards = new card[8]; 
+        for(int index=0; index < 6;index++){
+            communityCards[index] = new card(split[index]);
+            totalCards[index] = communityCards[index];
+        }
+        for(int index=0; index < 3;index++){
+            playerCards[index] = new card(split[(3+(playNumb*3)+index)]);
+            totalCards[index+5] = playerCards[index];
+        }
+        order(totalCards);
+    }
+    public void printBest(){
+        System.out.print("Player" + playerNum + "with");
+        for(int index = 0; index <6;index++)
+            bestHand[index].print();        
+        System.out.println(".");
+    }
+    public void order(card[] availibleCards){            
+      card[] temp = new card[6];
+      for(int firstCard = 0; firstCard < 8; firstCard++){
+       
+          temp[0] = availibleCards[firstCard];
+          for(int secondCard = 0; secondCard < 8 && secondCard != firstCard;
+               secondCard++){
+           
+            temp[1] = availibleCards[secondCard];       
+            for(int thirdCard = 0; thirdCard < 8 && thirdCard != firstCard 
+                 && thirdCard != secondCard;thirdCard++){
+            
+             temp[2] = availibleCards[thirdCard];  
+             for(int fourthCard = 0; fourthCard < 8 && fourthCard != firstCard 
+                 && fourthCard != secondCard 
+                 && fourthCard != thirdCard;fourthCard++){
+             
+                 temp[3] = availibleCards[fourthCard];   
+                 for(int fifthCard = 0; fifthCard < 8 && fifthCard != firstCard 
+                     && fifthCard != secondCard && fifthCard != thirdCard
+                     && fifthCard != fourthCard;fifthCard++){
+                     
+                   temp[4] = availibleCards[fifthCard];
+                   for(int sixthCard = 0; fifthCard < 8 && 
+                           sixthCard != firstCard && sixthCard != secondCard 
+                        && sixthCard != thirdCard &&sixthCard != fourthCard
+                        && sixthCard != fifthCard;sixthCard++){
+                         
+                       temp[5] = availibleCards[fifthCard];
+                       score(temp);                       
+                    }
+                 }
+             }
+           }
+          }
+      }
+                     
+    
+    }
+    public void score(card[] heldHand){  
+        // The heldHand provides you player and community cards combined,
+        // You can test these cards to make a hand of 6, and then output
+        // The total score
+        // Scores should be ranked by rank/top card/suit 2 digits each        
+        // (ex. 010204)1 pair of 2s, top spades
+        nonRainbow(heldHand);                   //2? 3? 4? 5? 8? J? You don’t have at least one of each suit. 
+    /*    onePair(heldHand);                      //J? J? 4? 8? 7? 5? You have two cards of the same rank. 
+        rainbow(heldHand);                      //8? 4? 6? Q? K? A? You have one of each suit. 
+        twoPair(heldHand);                      //8? 8? A? A? 3? 7? You hold four cards that consist of only two ranks. 
+
+        ThreeOfAKind(heldHand);                 //2? 3? 4? 4? 4? 9? You have three cards of the same rank. 
+        swingers(heldHand);                     //K? Q? 8? 3? K? Q? You have two sets of suited Kings and Queens. 
+        fiveCardStraight(heldHand);             //3? 7? 8? 9? T? J? You hold ?ve cards in numerical sequence (A is either 1 or 13). 
+
+        monochromatic(heldHand);                //8? 4? Q? 4? 9? K? Your cards are either all black or all red. 
+        fullhouse(heldHand);                    //4? 4? 8? Q? Q? Q? You hold both a pair of something and three of a kind. 
+        threePair(heldHand);                    //4? 4? 8? 8? 9? 9? Cards consist of exactly three unique ranks. 
+
+        Monarchy(heldHand);                     //4? 8? T? J? Q? K? A Jack, Queen and King of the same suit and no other face cards. 
+        Even(heldHand);                         //2? 4? 6? 8? T? T? All your cards are a 2,4,6,8 or 10. 
+        sixCardStraight(heldHand);              //6? 7? 8? 9? T? J? You have six cards in numerical order (like 5 card straight but 6). 
+
+        fourOfKind(heldHand);                   //6? 6? 6? 6? 8? 9? You hold four of a kind. 
+        odd(heldHand);                          //3? 5? 7? 7? 9? 9? All of your cards are a 3,5,7 or 9. 
+        flush(heldHand);                        //3? 5? 6? 7? J? Q? All six of your cards are the same suit. 
+
+        triplets(heldHand);                     //3? 3? 3? T? T? T? You have two di?erent three of a kinds. 
+        overFullHouse(heldHand);                //5? 5? 5? 5? J? J? Four of a kind and a pair. 
+        homosapiens(heldHand);                  //J? J? J? Q? Q? K? All your cards are face cards. 
+
+        kingdom(heldHand);                      //4? 8? T? J? Q? K? (Monarchy + ?ush) a Monarchy with remaining cards of the same suit! 
+        fiveCardStraightFush(heldHand);         //3? 7? 8? 9? T? J? 5 cards straight but all six cards are the same suit. 
+        sixCardStraightFlush(heldHand);         //6? 7? 8? 9? T? J? 6 cards straight all in the same suit. 
+
+        orgy(heldHand);                         //J? J? J? J? Q? Q? All your cards are Jacks and Queens. 
+        politics(heldHand);                     //J? J? Q? Q? K? K? You hold two Monarchys. 
+        dinnerParty(heldHand);   */               //Q? Q? Q? K? K? K? All your cards are suited kings and queens.
+    }    
+    public void nonRainbow(card[] rainbowPool){
+        score = 0;
+    }
+    
+}

@@ -1,0 +1,133 @@
+/*Authoer:  James Renger
+Course:     Comp 182(16203-SP17)
+Project:    Project 6
+Program function:   The function of this program is to allow the program to continue
+to ask questions, and to fill out a tree, so that it can accurately catagorize
+the users input.
+Files in project:   Project6.java, Tree.java,Node.java
+Code Referenced:    No external code was used.
+*/
+
+
+package project6;
+
+import java.util.Scanner;
+import java.util.LinkedList;
+
+//defining
+public class Tree {
+    LinkedList<Node> leaves = new LinkedList<Node>();
+    Node curr;
+    Node root;
+    
+public Tree(String q){
+    root = new Node(q);
+    curr = root;
+    curr.setAnswer("I don't think I know this.  Would you mind telling me?");
+    curr.setYes(new Node("did it create rock and roll?", "humans", root));
+    curr.setNo(new Node("Does it have legs?", "Monkey", root));
+}
+
+public boolean ask(Node c){
+    curr = c;
+    Scanner scanner = new Scanner( System.in );
+    //Ask the question about the node
+    System.out.println(curr.question + " Y/N/Quit");
+    String input1 = scanner.nextLine();
+        switch (input1) {
+            //If yes w/yes node, ask yes node.  No yes node, guess, update or play again.
+            case "Y": case "y":
+                //No yes node, guess
+                if(curr.getYes() == null){
+                    System.out.println("Is your thought " + c.getAnswer() + "?");
+                    String input = scanner.nextLine();
+                    //Switch, if yes, ask to play again, otherwise update yes node
+                    switch (input) {
+                        //Computer won, ask to play again
+                        case "Y":case "y":
+                            System.out.println("Then I win!\n Would you like to play again?(Y/N)");
+                            input1 = scanner.nextLine();
+                            switch (input1){
+                                case "Y":case "y":                    
+                                    return true;
+                                case "N":case "n":
+                                    return false;
+                                }
+                        //Computer guessed wrong, update and restart
+                        case "N":case "n":
+                            System.out.println("I must not know this animal.\n What animal is it?");
+                            input1 = scanner.nextLine();
+                            System.out.println("What's a question that is yes for, " + input1
+                            + ", but no for " + curr.answer);
+                            String input2 = scanner.nextLine();                                                
+                            curr.setYes(new Node(input2, input1, curr));
+                            System.out.println("Now I know " + curr.getYes().getAnswer());                                            
+                        return true;
+                    //If they typed quit, end program
+                    case "Quit":case "quit":
+                        return false;
+                    //Anything unexpected, ask again.
+                    default:
+                        System.out.println("I didn't understand your answer.");
+                        return ask(curr);
+                    }
+                }
+                //If there was a yes node, ask that.
+                if(curr.getYes() != null)
+                    return ask(curr.getYes());                      
+            //If no, if there's a no node, ask that.  Otherwise, add no node.
+            case "N": case "n":
+                //If they answered yes to the parents question, and no to this one
+                //Guess if it was the parent.  If not, add a no node here.
+                if(curr.getNo() == null && curr.equals(curr.getParent().getYes())){
+                    System.out.println("Is it " + curr.getParent().getAnswer() + "?");
+                    input1 = scanner.nextLine();
+                    if(input1.equals("Y")||input1.equals("y")){
+                        System.out.println("Then I win!\n Would you like to play again?(Y/N)");
+                        input1 = scanner.nextLine();
+                        switch (input1){
+                            case "Y":case "y":                    
+                                return true;
+                            case "N":case "n":
+                                return false;                        
+                        }
+                    }
+                    else if(input1.equals("N")||input1.equals("n")){
+                            System.out.println("I must not know this animal.\n What animal is it?");
+                            input1 = scanner.nextLine();
+                            System.out.println("What's a question that is yes for, " + input1
+                                + ", but no for " + curr.getParent().getAnswer());
+                            String input2 = scanner.nextLine();
+                            curr.setNo(new Node(input2, input1, curr));                    
+                            System.out.println("Now I know " + curr.getNo().getAnswer());
+                            return true;
+                        }
+                }
+                //If they answered no, and there is a no node, ask no node.
+                else if(curr.getNo() != null){
+                    return ask(curr.getNo());
+                    }
+                //If not, update no node.
+                else if(curr.getNo() == null){
+                    System.out.println("I must not know this animal.\n What animal is it?");
+                            input1 = scanner.nextLine();
+                            System.out.println("What's a question that is yes for, " + input1
+                                + ", but no for " + curr.getAnswer());
+                            String input2 = scanner.nextLine();
+                            curr.setNo(new Node(input2, input1, curr));                    
+                            System.out.println("Now I know " + curr.getNo().getAnswer());
+                            return true;
+                }
+            case "Quit": case "quit":
+                return false;
+            default:
+                System.out.println("I didn't recognize your answer. Please answer Y/N/Quit");
+                return ask(curr);
+        }
+    }
+
+public Node getRoot(){
+    return root;
+}    
+}
+

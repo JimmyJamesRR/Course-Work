@@ -1,0 +1,279 @@
+// CS2A Lab 8 Option A
+// James Renger's Solution:
+// Original - Employee Framework CS 2A Fall 2016
+
+/* Notes: 
+Creates an object called DateProfile, manipulates it's data, and outputs the data
+to demonstrate the various changes to the data during the run.
+*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// DateProfile class prototype ----------------------------------------------
+class DateProfile
+{
+private:
+  char gender, searchGender;
+  int romance, finance;
+  string name;
+
+public:
+   //static constants
+   static const int MIN_FINANCE = 1;
+   static const int MAX_FINANCE = 10;
+   static const int MIN_ROMANCE = 1;
+   static const int MAX_ROMANCE = 10;
+   static const int MIN_NAME_LENGTH = 1;
+   static const int MAX_NAME_LENGTH = 20;
+   static const int DEFAULT_FINANCE = 5;
+   static const int DEFAULT_ROMANCE = 5;
+   static const char DEFAULT_CHAR;
+   static const string DEFAULT_STRING;
+
+   // default constructor
+   DateProfile::DateProfile()
+   {
+       name = DEFAULT_STRING;
+       gender = DEFAULT_CHAR;
+       searchGender = DEFAULT_CHAR;
+       romance = DEFAULT_ROMANCE;
+       finance = DEFAULT_FINANCE;   
+   }
+   
+   // constructor with parameters
+   DateProfile::DateProfile(string inputName, char inputGender, 
+       char inputSearchGender, double inputRomance, double inputFinance)
+   {
+       name = inputName;
+       gender = inputGender;
+       searchGender = inputSearchGender;
+       romance = inputRomance;
+       finance = inputFinance; 
+   }
+   
+   // public instance methods   
+   double fitValue(DateProfile partner);
+   double determineFinanceFit(DateProfile partner);
+   double determineRomanceFit(DateProfile partner);
+   bool determineGenderFit(DateProfile partner);
+   
+   //sets
+   bool setName(string inputName);
+   bool setGender(char inputGender);
+   bool setSearchGender(char inputSearchGender);
+   bool setFinance(int inputFinance);
+   bool setRomance(int inputRomance);
+   
+   //gets
+   string getName();
+   char getGender();
+   char getSearchGender();
+   double getFinance();
+   double getRomance();
+   
+   //other
+   void setDefaults();
+   void display();     
+};
+
+// Global Method Prototypes -------------------------------------------------
+void displayTwoProfiles(DateProfile profile1, DateProfile profile2);
+
+// main method --------------------------------------------------------------
+int  main()
+{
+    DateProfile Jon("Jon Doe", 'M', 'F', 3, 5), James("James Dean", 'M', 'F', 9,4), 
+        Jane("Jane Doe", 'F', 'M', 10, 5), Mary("Mary Sue", 'F', 'M', 1, 10);
+    
+    //Comparing Jon
+    displayTwoProfiles(Jon, Jon);
+    displayTwoProfiles(Jon, James);
+    displayTwoProfiles(Jon, Jane);
+    displayTwoProfiles(Jon, Mary);
+
+    //Comparing James
+    displayTwoProfiles(James, Jon);
+    displayTwoProfiles(James, James);
+    displayTwoProfiles(James, Jane);
+    displayTwoProfiles(James, Mary);
+
+    //Comparing Jane
+    displayTwoProfiles(Jane, Jon);
+    displayTwoProfiles(Jane, James);
+    displayTwoProfiles(Jane, Jane);
+    displayTwoProfiles(Jane, Mary);
+
+    //Comparing Mary
+    displayTwoProfiles(Mary, Jon);
+    displayTwoProfiles(Mary, James);
+    displayTwoProfiles(Mary, Jane);
+    displayTwoProfiles(Mary, Mary);
+
+    return 0;    
+}
+
+//-------- Method Definitions----------------------------------------------------
+void displayTwoProfiles(DateProfile profile1, DateProfile profile2)
+{
+    cout << "Fit between " << profile1.getName() << " and " << profile2.getName() 
+        << ".\n" << profile1.fitValue(profile2) << "\n" ;
+}
+
+// -------- DateProfile Member Functions ----------------------------------------
+
+const string DateProfile::DEFAULT_STRING = " (undefined) ";
+const char DateProfile::DEFAULT_CHAR = 'X' ;
+
+double DateProfile::determineFinanceFit(DateProfile partner)
+{
+    double finFit;
+    if (finance > partner.finance)
+        finFit = (1 - ((getFinance() - partner.getFinance()) / 10));
+    else if (getFinance() == partner.getFinance())
+        finFit = 1;
+    else
+        finFit =  (1 - ((partner.getFinance() - getFinance()) / 10));
+    return finFit;
+}
+double DateProfile::determineRomanceFit(DateProfile partner)
+{
+    double romFit;
+    if (getRomance() > partner.getRomance())
+        romFit = (1 - ((romance - partner.romance) / 10));
+    else if (getRomance() == partner.getRomance())
+        romFit = 1;
+    else
+        romFit = (1 - ((partner.getRomance() - getRomance()) / 10));    
+    return romFit;
+}
+bool DateProfile::determineGenderFit(DateProfile partner)
+{
+    if (gender == partner.searchGender && 
+        searchGender == partner.gender)
+        return true;
+    return false;
+}
+double DateProfile::fitValue(DateProfile partner)
+{
+    double totalFit, financeFit, romanceFit;
+    if (determineGenderFit(partner))
+    {        
+        financeFit = determineFinanceFit(partner);
+        romanceFit = determineRomanceFit(partner);
+        totalFit = (( financeFit + romanceFit ) / 2);
+        return totalFit;
+    }
+    return 0;        
+}
+
+//Mutators "set" methods------------------------------------------------
+bool DateProfile::setName(string inputName)
+{
+    if (inputName.length() >= MIN_NAME_LENGTH && inputName.length() 
+        <= MAX_NAME_LENGTH)
+        name = inputName;
+    else 
+        name = DEFAULT_STRING;
+    return true;
+}
+bool DateProfile::setGender(char inputGender)
+{
+    if (inputGender == 'M' || inputGender == 'F')
+        gender = inputGender;
+    else 
+        gender = DEFAULT_CHAR;
+    return true;
+}
+bool DateProfile::setSearchGender(char inputSearchGender)
+{
+    if (inputSearchGender == 'M' || inputSearchGender == 'F')
+        gender = inputSearchGender;
+    else 
+        gender = DEFAULT_CHAR;
+    return true;
+}
+bool DateProfile::setFinance(int inputFinance)
+{
+    if (inputFinance >= MIN_FINANCE && inputFinance <= MAX_FINANCE)
+        finance = inputFinance;
+    else 
+        finance = DEFAULT_FINANCE;
+    return true;
+}
+bool DateProfile::setRomance(int inputRomance)
+{
+    if (inputRomance >= MIN_ROMANCE && inputRomance <= MAX_ROMANCE)
+        romance = inputRomance;
+    else 
+        romance = DEFAULT_ROMANCE;
+    return true;
+}
+void DateProfile::setDefaults()
+{
+       name = DEFAULT_STRING;
+       gender = DEFAULT_CHAR;
+       searchGender = DEFAULT_CHAR;
+       romance = DEFAULT_ROMANCE;
+       finance = DEFAULT_FINANCE; 
+}
+
+// accessor "get" methods -----------------------------------------------
+string DateProfile::getName()
+{
+    return name;
+}
+char DateProfile::getGender()
+{
+    return gender;
+}
+char DateProfile::getSearchGender()
+{
+    return searchGender;
+}
+double DateProfile::getFinance()
+{
+    return finance;
+}
+double DateProfile::getRomance()
+{
+    return romance;
+}
+
+/* Run 1----------------------------------------------------------------
+Fit between Jon Doe and Jon Doe.
+0
+Fit between Jon Doe and James Dean.
+0
+Fit between Jon Doe and Jane Doe.
+0.65
+Fit between Jon Doe and Mary Sue.
+0.75
+Fit between James Dean and Jon Doe.
+0
+Fit between James Dean and James Dean.
+0
+Fit between James Dean and Jane Doe.
+0.9
+Fit between James Dean and Mary Sue.
+0.7
+Fit between Jane Doe and Jon Doe.
+1
+Fit between Jane Doe and James Dean.
+0.95
+Fit between Jane Doe and Jane Doe.
+0
+Fit between Jane Doe and Mary Sue.
+0
+Fit between Mary Sue and Jon Doe.
+0.65
+Fit between Mary Sue and James Dean.
+0.3
+Fit between Mary Sue and Jane Doe.
+0
+Fit between Mary Sue and Mary Sue.
+0
+Press any key to continue . . .
+
+*/

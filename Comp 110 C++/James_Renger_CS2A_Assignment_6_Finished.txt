@@ -1,0 +1,677 @@
+// CS2A Lab 6 Option A
+// James Renger's Solution:
+// Original - Employee Framework CS 2A Fall 2016
+
+/* Notes: 
+A Slot Machine, with error checking for valid strings for each slot, and
+error checking for input.  Now seemingly run time error free!  Thanks for
+the encouragement, help and support!
+*/
+
+
+#include <iostream>
+#include <string>
+#include <ctime>
+using namespace std;
+
+// TripleString class prototype ---------------------
+class TripleString
+{
+private:
+  string string1;
+  string string2;
+  string string3;
+  bool validString(string str);
+
+public:
+   //static constants
+   static const int MAX_LEN = 20;
+   
+
+   // default constructor
+   TripleString::TripleString()
+   {
+       string1 = "";
+       string2 = "";
+       string3 = "";
+   }
+
+   // mutators and accessors
+   void setString1();
+   void setString2();
+   void setString3();   
+   string getString1();
+   string getString2();
+   string getString3();
+   string randString();
+   
+};
+// Global Method Prototypes -------------------------------------------------
+int getBet();
+TripleString pull();
+int getPayMultiplier (TripleString thePull);
+void display(TripleString thePull, int winnings);
+
+// main method ---------------------------------
+int  main()
+{
+    srand(time(NULL));
+    while(true) 
+    {
+        TripleString thePull;
+        int bet, winnings;
+        bet = getBet();
+        if (bet == 0)
+            break;
+        thePull = pull();
+        winnings = getPayMultiplier(thePull) * bet;
+        display(thePull, winnings);
+    }   
+}
+//-------- Method Definitions
+int getBet()
+{
+    int input = -1;
+    while(input < 0 || input > 50)
+    {
+        cout << "Please enter your bet(1-50) or '0' to Quit: ";
+        cin >> input;
+        if (input >= 0 && input <= 50)
+           return input;
+    }
+}
+TripleString pull()
+{
+    TripleString thePull;
+    thePull.setString1();
+    thePull.setString2();
+    thePull.setString3();
+    return thePull;
+}
+int getPayMultiplier (TripleString thePull)
+{
+    int multiplier = 0;
+    if (thePull.getString1() == "cherries")
+    {
+        if (thePull.getString2() == "cherries")
+        {
+            if (thePull.getString3() == "cherries")
+                multiplier = 30;
+            else            
+                multiplier = 15;
+        }
+        else
+            multiplier = 5;
+    }
+    else if (thePull.getString1() == "BAR" && thePull.getString2() == "BAR" && thePull.getString3() == "BAR")
+        multiplier = 50;
+    else if (thePull.getString1() == "7" && thePull.getString2() == "7" && thePull.getString3() == "7")
+        multiplier = 100;
+    return multiplier;
+}
+void display(TripleString thePull, int winnings)
+{
+    cout << "---------------------------\n"
+        << thePull.getString1() << " | " << thePull.getString2() << " | " << thePull.getString3() << "\n" <<
+        "---------------------------\n";
+    if (winnings > 0)
+        cout << "You won $" << winnings << "!\n \n";
+    else
+        cout << "Sorry, you lost.\n \n";
+}
+
+// -------- TripleString Member Functions ------------
+bool TripleString::validString(string str)
+{
+    if(str.length() <= MAX_LEN && str != "")
+        return true;
+    //else
+    return false;
+}
+string TripleString::randString()
+{
+    int randomNum = rand() % 20;
+    string current = "";
+    while (current == "")
+    {
+        if (randomNum == 0)
+        {
+            current = "space";
+        }
+        else if (randomNum > 0 && randomNum <= 5)
+        {
+            current = "7";
+        }
+        else if (randomNum >= 6 && randomNum <= 11)
+        {
+            current = "cherries";
+        }
+        else if (randomNum > 11 && randomNum < 19)
+        {
+            current = "BAR";
+        } 
+        if (validString(current) == true)
+            return current;
+        else
+        {
+            current == "";
+            randomNum = 0;
+        }
+    }
+}
+void TripleString::setString1()
+{
+    string1 = randString();
+}
+void TripleString::setString2()
+{
+    string2 = randString();
+}
+void TripleString::setString3()
+{
+    string3 = randString();
+}
+// accessor "get" methods 
+string TripleString::getString1()
+{
+   return string1;
+}
+string TripleString::getString2()
+{
+   return string2;
+}
+string TripleString::getString3()
+{
+   return string3;
+}
+
+/*  Run 1, Please enter your bet(1-50) or '0' to Quit: 1
+---------------------------
+7 | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 2
+---------------------------
+7 | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 3
+---------------------------
+BAR | cherries | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 4
+---------------------------
+cherries | BAR | cherries
+---------------------------
+You won $20!
+
+Please enter your bet(1-50) or '0' to Quit: 5
+---------------------------
+7 | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 6
+---------------------------
+space | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 7
+---------------------------
+space | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 8
+---------------------------
+7 | space | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 9
+---------------------------
+space | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 10
+---------------------------
+BAR | cherries | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 11
+---------------------------
+space | cherries | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 12
+---------------------------
+BAR | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 13
+---------------------------
+cherries | space | BAR
+---------------------------
+You won $65!
+
+Please enter your bet(1-50) or '0' to Quit: 14
+---------------------------
+BAR | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 15
+---------------------------
+BAR | space | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 16
+---------------------------
+BAR | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 17
+---------------------------
+BAR | BAR | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 18
+---------------------------
+7 | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 19
+---------------------------
+BAR | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 20
+---------------------------
+7 | BAR | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 21
+---------------------------
+BAR | 7 | space
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 22
+---------------------------
+7 | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 23
+---------------------------
+BAR | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 24
+---------------------------
+BAR | cherries | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 25
+---------------------------
+7 | 7 | 7
+---------------------------
+You won $2500!
+
+Please enter your bet(1-50) or '0' to Quit: 26
+---------------------------
+BAR | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 27
+---------------------------
+BAR | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 28
+---------------------------
+cherries | BAR | BAR
+---------------------------
+You won $140!
+
+Please enter your bet(1-50) or '0' to Quit: 29
+---------------------------
+BAR | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 30
+---------------------------
+cherries | BAR | cherries
+---------------------------
+You won $150!
+
+Please enter your bet(1-50) or '0' to Quit: 31
+---------------------------
+space | space | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 32
+---------------------------
+cherries | BAR | 7
+---------------------------
+You won $160!
+
+Please enter your bet(1-50) or '0' to Quit: 33
+---------------------------
+cherries | 7 | cherries
+---------------------------
+You won $165!
+
+Please enter your bet(1-50) or '0' to Quit: 34
+---------------------------
+cherries | BAR | cherries
+---------------------------
+You won $170!
+
+Please enter your bet(1-50) or '0' to Quit: 35
+---------------------------
+BAR | cherries | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 36
+---------------------------
+BAR | BAR | BAR
+---------------------------
+You won $1800!
+
+Please enter your bet(1-50) or '0' to Quit: 37
+---------------------------
+BAR | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 38
+---------------------------
+space | cherries | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 39
+---------------------------
+7 | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 40
+---------------------------
+7 | cherries | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 51
+Please enter your bet(1-50) or '0' to Quit: -1
+Please enter your bet(1-50) or '0' to Quit: 0
+*/
+
+/* Run 2
+Please enter your bet(1-50) or '0' to Quit: 1
+---------------------------
+BAR | BAR | BAR
+---------------------------
+You won $50!
+
+Please enter your bet(1-50) or '0' to Quit: 2
+---------------------------
+space | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 3
+---------------------------
+BAR | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 4
+---------------------------
+BAR | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 5
+---------------------------
+cherries | cherries | BAR
+---------------------------
+You won $75!
+
+Please enter your bet(1-50) or '0' to Quit: 6
+---------------------------
+cherries | cherries | cherries
+---------------------------
+You won $180!
+
+Please enter your bet(1-50) or '0' to Quit: 7
+---------------------------
+7 | 7 | 7
+---------------------------
+You won $700!
+
+Please enter your bet(1-50) or '0' to Quit: 8
+---------------------------
+cherries | BAR | 7
+---------------------------
+You won $40!
+
+Please enter your bet(1-50) or '0' to Quit: 9
+---------------------------
+7 | 7 | 7
+---------------------------
+You won $900!
+
+Please enter your bet(1-50) or '0' to Quit: 10
+---------------------------
+BAR | 7 | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 11
+---------------------------
+cherries | BAR | 7
+---------------------------
+You won $55!
+
+Please enter your bet(1-50) or '0' to Quit: 12
+---------------------------
+7 | BAR | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 13
+---------------------------
+7 | cherries | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 14
+---------------------------
+BAR | space | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 15
+---------------------------
+cherries | cherries | 7
+---------------------------
+You won $225!
+
+Please enter your bet(1-50) or '0' to Quit: 16
+---------------------------
+7 | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 17
+---------------------------
+BAR | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 18
+---------------------------
+7 | BAR | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 19
+---------------------------
+BAR | 7 | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 20
+---------------------------
+cherries | space | BAR
+---------------------------
+You won $100!
+
+Please enter your bet(1-50) or '0' to Quit: 21
+---------------------------
+cherries | BAR | BAR
+---------------------------
+You won $105!
+
+Please enter your bet(1-50) or '0' to Quit: 22
+---------------------------
+cherries | BAR | 7
+---------------------------
+You won $110!
+
+Please enter your bet(1-50) or '0' to Quit: 23
+---------------------------
+BAR | BAR | BAR
+---------------------------
+You won $1150!
+
+Please enter your bet(1-50) or '0' to Quit: 24
+---------------------------
+BAR | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 25
+---------------------------
+BAR | 7 | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 26
+---------------------------
+cherries | space | BAR
+---------------------------
+You won $130!
+
+Please enter your bet(1-50) or '0' to Quit: 27
+---------------------------
+7 | cherries | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 28
+---------------------------
+BAR | cherries | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 29
+---------------------------
+space | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 30
+---------------------------
+BAR | BAR | 7
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 31
+---------------------------
+BAR | cherries | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 32
+---------------------------
+space | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 33
+---------------------------
+BAR | 7 | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 34
+---------------------------
+cherries | BAR | cherries
+---------------------------
+You won $170!
+
+Please enter your bet(1-50) or '0' to Quit: 35
+---------------------------
+cherries | BAR | cherries
+---------------------------
+You won $175!
+
+Please enter your bet(1-50) or '0' to Quit: 36
+---------------------------
+cherries | BAR | BAR
+---------------------------
+You won $180!
+
+Please enter your bet(1-50) or '0' to Quit: 37
+---------------------------
+cherries | space | cherries
+---------------------------
+You won $185!
+
+Please enter your bet(1-50) or '0' to Quit: 38
+---------------------------
+7 | BAR | cherries
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 39
+---------------------------
+BAR | 7 | BAR
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: 40
+---------------------------
+BAR | space | space
+---------------------------
+Sorry, you lost.
+
+Please enter your bet(1-50) or '0' to Quit: -10
+Please enter your bet(1-50) or '0' to Quit: 100
+Please enter your bet(1-50) or '0' to Quit: 0
+*/

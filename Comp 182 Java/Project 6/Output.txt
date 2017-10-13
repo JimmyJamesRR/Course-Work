@@ -1,0 +1,114 @@
+run:
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+Y
+did it create rock and roll? Y/N/Quit
+Y
+Is your thought humans?
+Y
+Then I win!
+ Would you like to play again?(Y/N)
+Y
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+Y
+did it create rock and roll? Y/N/Quit
+Y
+Is your thought humans?
+N
+I must not know this animal.
+ What animal is it?
+Jimi Hendrix
+What's a question that is yes for, Jimi Hendrix, but no for humans
+Was it too good to be human?
+Now I know Jimi Hendrix
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+Y
+did it create rock and roll? Y/N/Quit
+Y
+Was it too good to be human? Y/N/Quit
+Y
+Is your thought Jimi Hendrix?
+N
+I must not know this animal.
+ What animal is it?
+Lemmy
+What's a question that is yes for, Lemmy, but no for Jimi Hendrix
+Was it british?
+Now I know Lemmy
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+Y
+did it create rock and roll? Y/N/Quit
+Y
+Was it too good to be human? Y/N/Quit
+Y
+Was it british? Y/N/Quit
+n
+Is it Jimi Hendrix?
+y
+Then I win!
+ Would you like to play again?(Y/N)
+y
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+n
+Does it have legs? Y/N/Quit
+n
+I must not know this animal.
+ What animal is it?
+Snek
+What's a question that is yes for, Snek, but no for Monkey
+No step on?
+Now I know Snek
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+n
+Does it have legs? Y/N/Quit
+n
+No step on? Y/N/Quit
+y
+Is your thought Snek?
+n
+I must not know this animal.
+ What animal is it?
+Sting Ray
+What's a question that is yes for, Sting Ray, but no for Snek
+Does it live in water?
+Now I know Sting Ray
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+n
+Does it have legs? Y/N/Quit
+y
+Is your thought Monkey?
+n
+I must not know this animal.
+ What animal is it?
+Wolf
+What's a question that is yes for, Wolf, but no for Monkey
+Does it have 4 legs?
+Now I know Wolf
+Think of an animal.
+  I'm going to try to ask questions, until I can guess it.
+Does it demonstrate self awareness? Y/N/Quit
+n
+Does it have legs? Y/N/Quit
+y
+Does it have 4 legs? Y/N/Quit
+n
+Is it Monkey?
+y
+Then I win!
+ Would you like to play again?(Y/N)
+n
+Good Bye.
+BUILD SUCCESSFUL (total time: 2 minutes 39 seconds)

@@ -1,0 +1,211 @@
+// CS2A Lab 7 Option A
+// James Renger's Solution:
+// Original - Employee Framework CS 2A Fall 2016
+
+/* Notes: 
+Creates an object called Itunes, manipulates it's data, and outputs the data
+to demonstrate the various changes to the data during the run.
+*/
+
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+
+// ITunes class prototype ---------------------
+class ITunes
+{
+private:
+  string name;
+  string artist;
+  int bitrate;
+  int totalTime;
+
+public:
+   //static constants
+   static const int MIN_BITRATE = 64;
+   static const int MAX_BITRATE = 705;
+   static const int MIN_STR_LENGTH = 1;
+   static const int MAX_STR_LENGTH = 128;
+   static const int MIN_PLAY_TIME = 5000;
+   static const int MAX_PLAY_TIME = 1000*60*60;
+   static const int DEFAULT_BITRATE = 64;
+   static const int DEFAULT_PLAY_TIME = 1000;
+   static const string DEFAULT_STRING;
+
+   // default constructor
+   ITunes::ITunes()
+   {
+       name = DEFAULT_STRING;
+       artist= DEFAULT_STRING;
+       bitrate = DEFAULT_BITRATE;
+       totalTime = DEFAULT_PLAY_TIME;
+   }
+   // constructor with parameters
+   ITunes::ITunes(string inputName, string inputArtist, int inputBitRate, int inputTotalTime)
+   {
+       name = inputName;
+       artist= inputArtist;
+       bitrate = inputBitRate;
+       totalTime = inputTotalTime;
+   }
+   // public instance methods
+   //sets
+   void setName(string inputName);
+   void setArtist(string inputArtist);
+   void setBitRate(int inputBitRate);
+   void setTotalTime(int inputTotalTime);
+   //gets
+   string getName();
+   string getArtist();   
+   int getBitRate();
+   int getTotalTime();
+   void setDefaults();
+   //other
+   string toString();
+   void display();     
+};
+
+// Global Method Prototypes -------------------------------------------------
+
+// main method ---------------------------------
+int  main()
+{
+    ITunes cara("Here", "Alessia Cara", 705, 269000) , players, 
+        jungleFiction("Empire", "Jungle Fiction", 128, 260000),
+        darkParadise("Dark Paradise", "Lana Del Rey", 720, 245000);
+    cara.display();
+    players.display();
+    jungleFiction.display();
+    darkParadise.display();
+    darkParadise.setBitRate(darkParadise.getBitRate());
+    jungleFiction.setTotalTime(0);
+    players.setArtist(cara.getName());
+    players.setName("Yeah");
+    cara.display();
+    players.display();
+    jungleFiction.display();
+    darkParadise.display();
+    cara.setDefaults();
+    players.setDefaults();
+    jungleFiction.setDefaults();
+    darkParadise.setDefaults();
+    cara.display();
+    players.display();
+    jungleFiction.display();
+    darkParadise.display();
+    return 0;    
+}
+
+//-------- Method Definitions
+
+// -------- ITunes Member Functions ------------
+
+const string ITunes::DEFAULT_STRING = " (undefined) ";
+
+void ITunes::display()
+{
+    string songInfo = toString();
+    cout << songInfo;
+}
+string ITunes::toString()
+{
+    string info, bitrateStr, totalTimeStr,totalTimeStrSec;
+    ostringstream cnvrt1;
+    ostringstream cnvrt2;
+    ostringstream cnvrt3;
+    cnvrt1 << bitrate;
+    cnvrt2 << totalTime / 1000 / 60;
+    cnvrt3 << totalTime / 1000 % 60;
+    bitrateStr = cnvrt1.str();
+    totalTimeStr = cnvrt2.str();
+    totalTimeStrSec = cnvrt3.str();
+    info = "Title: " + name + " / Artist: " + artist + " / Playing Time: " +
+        totalTimeStr + " minutes and " + totalTimeStrSec + " seconds. / Bit Rate: " 
+        + bitrateStr + "k\n \n";
+    return info;
+}
+
+//Mutators "set" methods
+void ITunes::setName(string inputName)
+{
+    if (inputName.length() >= MIN_STR_LENGTH && inputName.length() <= MAX_STR_LENGTH)
+        name = inputName;
+    else 
+        name = DEFAULT_STRING;
+}
+void ITunes::setArtist(string inputArtist)
+{
+    if (inputArtist.length() >= MIN_STR_LENGTH && inputArtist.length() <= MAX_STR_LENGTH)
+        artist = inputArtist;
+    else    
+        artist = DEFAULT_STRING;
+}
+void ITunes::setBitRate(int inputBitRate)
+{
+    if (inputBitRate >= MIN_BITRATE && inputBitRate <= MAX_BITRATE)
+        bitrate = inputBitRate;
+    else
+        bitrate = DEFAULT_BITRATE;
+}
+void ITunes::setTotalTime(int inputTotalTime)
+{
+    if (inputTotalTime >= MIN_PLAY_TIME && inputTotalTime <= MAX_PLAY_TIME)
+        totalTime = inputTotalTime; 
+    else
+        totalTime = DEFAULT_PLAY_TIME;
+}
+void ITunes::setDefaults()
+{
+    name = DEFAULT_STRING;
+    artist= DEFAULT_STRING;
+    bitrate = DEFAULT_BITRATE;
+    totalTime = DEFAULT_PLAY_TIME;
+}
+
+// accessor "get" methods 
+string ITunes::getName()
+{
+    return name;
+}
+string ITunes::getArtist()
+{
+    return artist;
+}
+int ITunes::getBitRate()
+{
+    return bitrate;
+}
+int ITunes::getTotalTime()
+{
+    return totalTime;
+}
+
+/* Run 1
+Title: Here / Artist: Alessia Cara / Playing Time: 4 minutes and 29 seconds. / Bit Rate: 705k
+
+Title:  (undefined)  / Artist:  (undefined)  / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 64k
+
+Title: Empire / Artist: Jungle Fiction / Playing Time: 4 minutes and 20 seconds. / Bit Rate: 128k
+
+Title: Dark Paradise / Artist: Lana Del Rey / Playing Time: 4 minutes and 5 seconds. / Bit Rate: 720k
+
+Title: Here / Artist: Alessia Cara / Playing Time: 4 minutes and 29 seconds. / Bit Rate: 705k
+
+Title: Yeah / Artist: Here / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 64k
+
+Title: Empire / Artist: Jungle Fiction / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 128k
+
+Title: Dark Paradise / Artist: Lana Del Rey / Playing Time: 4 minutes and 5 seconds. / Bit Rate: 64k
+
+Title:  (undefined)  / Artist:  (undefined)  / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 64k
+
+Title:  (undefined)  / Artist:  (undefined)  / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 64k
+
+Title:  (undefined)  / Artist:  (undefined)  / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 64k
+
+Title:  (undefined)  / Artist:  (undefined)  / Playing Time: 0 minutes and 1 seconds. / Bit Rate: 64k
+
+Press any key to continue . . .
+
+*/

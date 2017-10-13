@@ -1,0 +1,55 @@
+// James Renger
+// Assignment 2
+// Fall 2016
+#include <iostream>
+using namespace std;
+
+int main() {
+    //create variable and store ID into variable
+    int studID = 20295936;  
+    //create name length variable and store length
+    int numLet = 6;        
+    //create 2 variables to store the rithmetic, one for int one for dbl
+    int intResult = 0; 
+    double dblResult = 0;
+    //Output prints name and initial values for variables
+    cout << "My last (family) name is Renger.\n";
+    cout << "My Student ID is " << studID << ".\n";
+    cout << "The number of characters in my last name is " << numLet << ".\n";
+    //Calculate the first expression
+    intResult = studID % 2;
+    //Output the first expression
+    cout << "Expression #1 studID % 2: " << intResult << "\n";
+    //Calculate the second expression    
+    intResult = studID % numLet;
+    //Output the second expression
+    cout << "Expression #2 studID % numLet: " << intResult << "\n";
+    //Calculate the third expression    
+    dblResult = (double)studID / numLet;
+    //Output the third expression
+    cout << "Expression #3 studID / numLet: " << dblResult << "\n";
+    //Calculate the fourth expression    
+    intResult =  1 + 2 + 3 + 4 + 5 + numLet;
+    //Output the fouth expression
+    cout << "Expression #4 1 + 2 + 3 + 4 + 5 + numLet: " << intResult << "\n";
+    //Calculate the fifth expression    
+    dblResult = ( studID - 54321 ) / (( numLet + 30 ) * (numLet + 30));
+    //Output the fifth expression
+    cout << "Expression #3";
+    cout << "( studID - 54321 ) / (( numLet + 30 ) * (numLet + 30)): ";
+    cout << dblResult << "\n";
+    return 0;
+}
+/*    Output
+
+My last (family) name is Renger.
+My Student ID is 20295936.
+The number of characters in my last name is 6.
+Expression #1 studID % 2: 0
+Expression #2 studID % numLet: 0
+Expression #3 studID / numLet: 3.38266e+006
+Expression #4 1 + 2 + 3 + 4 + 5 + numLet: 21
+Expression #3( studID - 54321 ) / (( numLet + 30 ) * (numLet + 30)): 15618
+Press any key to continue . . .
+
+*/

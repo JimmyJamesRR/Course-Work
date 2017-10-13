@@ -1,0 +1,26 @@
+// Team Member Spock: Alkheraigi, Meshari 
+// Team Member Bones: Renger, James 
+// Class: COMP282 
+// Assignment: Project 1
+// Filelist: Main.java, card.java, hand.java, handScoreComparator.java
+
+package pkg282project1;
+
+import java.util.Comparator;
+
+public class handScoreComparator implements Comparator<hand>
+{
+    @Override
+    public int compare(hand x, hand y)
+    {        
+        if (x.score < y.score)
+        {
+            return -1;
+        }
+        if (x.score > y.score)
+        {
+            return 1;
+        }
+        return 0;
+    }
+}
